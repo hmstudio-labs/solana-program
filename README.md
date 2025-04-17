@@ -19,48 +19,108 @@ A Go SDK for interacting with various Solana programs including Pumpfun, Pumpfun
 ## Installation
 
 ```bash
-go get github.com/your-username/solana-program
+go get github.com/hmstudio-labs/solana-program
 ```
 
 ## Usage
 
-### Setting Compute Unit Limit
-
+### Pumpfun Program
 ```go
-// Set compute unit limit for transaction
-ComputeBudgetProgram.setComputeUnitLimit()
+package main
+
+import (
+	"github.com/hmstudio-labs/solana-program/pumpfun"
+	"github.com/gagliardetto/solana-go"
+)
+
+func main() {
+	// Initialize client
+	client := pumpfun.NewClient()
+	
+	// Example: Sell tokens
+	tx, err := client.Sell(
+		solana.MustPublicKeyFromBase58("tokenMintAddress"),
+		solana.MustPublicKeyFromBase58("bondingCurveAddress"),
+		solana.MustPublicKeyFromBase58("associatedBondingCurve"),
+		solana.MustPublicKeyFromBase58("associatedUser"),
+		solana.MustPublicKeyFromBase58("userWallet"),
+		1000000, // amount
+		500000,  // minSolOutput
+	)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("Transaction: %s\n", tx)
+}
 ```
 
-### Pumpfun Trading
-
+### PumpfunAMM Program
 ```go
-// Buy tokens from bonding curve
-PumpfunProgram.setBuy()
+package main
 
-// Sell tokens to bonding curve
-PumpfunProgram.setSell()
+import (
+	"github.com/hmstudio-labs/solana-program/pumpfunamm"
+	"github.com/gagliardetto/solana-go"
+)
+
+func main() {
+	// Example: Buy from liquidity pool
+	tx, err := pumpfunamm.Buy(
+		solana.MustPublicKeyFromBase58("poolAddress"),
+		solana.MustPublicKeyFromBase58("userWallet"),
+		1000000, // amount
+		500000,  // maxSolCost
+	)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("Transaction: %s\n", tx)
+}
 ```
 
-### PumpfunAMM Trading
-
+### Raydium Program
 ```go
-// Buy tokens from AMM pool
-PumpfunAMMProgram.setBuy()
+package main
 
-// Sell tokens to AMM pool
-PumpfunAMMProgram.setSell()
+import (
+	"github.com/hmstudio-labs/solana-program/raydium"
+	"github.com/gagliardetto/solana-go"
+)
+
+func main() {
+	// Example: Execute swap
+	tx, err := raydium.Swap(
+		solana.MustPublicKeyFromBase58("marketAddress"),
+		solana.MustPublicKeyFromBase58("userWallet"),
+		1000000, // amountIn
+		500000,  // minAmountOut
+	)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("Transaction: %s\n", tx)
+}
 ```
 
-### Raydium Trading
-
+### Jito Program
 ```go
-// Execute buy order on Raydium
-RaydiumProgram.setBuy()
+package main
 
-// Execute sell order on Raydium
-RaydiumProgram.setSell()
+import (
+	"github.com/hmstudio-labs/solana-program/jito"
+	"github.com/gagliardetto/solana-go"
+)
+
+func main() {
+	// Example: Stake tokens
+	tx, err := jito.Stake(
+		solana.MustPublicKeyFromBase58("validatorAddress"),
+		solana.MustPublicKeyFromBase58("userWallet"),
+		1000000, // amount
+	)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("Transaction: %s\n", tx)
+}
 ```
-
-## License
-
-MIT

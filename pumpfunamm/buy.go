@@ -57,8 +57,6 @@ func NewBuyInstruction(
 	userQuoteTokenAccount sol.PublicKey,
 	poolBaseTokenAccount sol.PublicKey,
 	poolQuoteTokenAccount sol.PublicKey,
-	associatedBondingCurve sol.PublicKey,
-	associatedUser sol.PublicKey,
 	user sol.PublicKey) *Buy {
 	return newBuyInstructionBuilder().
 		setBaseAmountOut(baseAmountOut).
