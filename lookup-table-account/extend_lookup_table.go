@@ -26,6 +26,7 @@ func NewExtendLookupTableInstruction(
 	authority sol.PublicKey,
 	payer sol.PublicKey) *ExtendLookupTable {
 	return newExtendLookupTableInstructionBuilder().
+		SetAddresses(addresses).
 		SetLookupTableAccount(lookupTableAccount).
 		SetLookupTableAuthority(authority).
 		SetPayer(payer)
