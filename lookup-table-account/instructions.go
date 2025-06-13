@@ -14,9 +14,11 @@ var (
 )
 
 var (
-	Instruction_CreateLookupTable = bin.TypeID([8]byte{0, 0, 0, 0, 0, 0, 0, 0})
-
-	Instruction_ExtendLookupTable = bin.TypeID([8]byte{2, 0, 0, 0, 0, 0, 0, 0})
+	Instruction_CreateLookupTable     = bin.TypeID([8]byte{0, 0, 0, 0, 0, 0, 0, 0})
+	Instruction_FreezeLookupTable     = bin.TypeID([8]byte{1, 0, 0, 0, 0, 0, 0, 0})
+	Instruction_ExtendLookupTable     = bin.TypeID([8]byte{2, 0, 0, 0, 0, 0, 0, 0})
+	Instruction_DeactivateLookupTable = bin.TypeID([8]byte{3, 0, 0, 0, 0, 0, 0, 0})
+	Instruction_CloseLookupTable      = bin.TypeID([8]byte{4, 0, 0, 0, 0, 0, 0, 0})
 )
 
 type Instruction struct {
