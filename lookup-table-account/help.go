@@ -22,12 +22,31 @@ func CreateLookupTableQuick(
 	return lookupTableAddress, ix
 }
 
+func FreezeLookupTableQuick(
+	lookupTable sol.PublicKey,
+	authority sol.PublicKey) *Instruction {
+	return NewFreezeLookupTableInstruction(lookupTable, authority).Build()
+}
+
 func ExtendLookupTableQuick(
 	lookupTable sol.PublicKey,
 	authority sol.PublicKey,
 	payer sol.PublicKey,
 	addresses []sol.PublicKey) *Instruction {
 	return NewExtendLookupTableInstruction(addresses, lookupTable, authority, payer).Build()
+}
+
+func DeactivateLookupTableQuick(
+	lookupTable sol.PublicKey,
+	authority sol.PublicKey) *Instruction {
+	return NewDeactivateLookupTableInstruction(lookupTable, authority).Build()
+}
+
+func CloseLookupTableQuick(
+	lookupTable sol.PublicKey,
+	authority sol.PublicKey,
+	payer sol.PublicKey) *Instruction {
+	return NewCloseLookupTableInstruction(lookupTable, authority, payer).Build()
 }
 
 func encodeI64LE(n *big.Int) []byte {
