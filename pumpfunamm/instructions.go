@@ -10,7 +10,7 @@ import (
 
 var (
 	Global                   = sol.MustPublicKeyFromBase58("ADyA8hdefvWN2dbGGWFotbzWxrAvLW83WG6QCVXvJKqw")
-	FeeRecipient             = sol.MustPublicKeyFromBase58("G5UZAVbAf46s7cKWoyKu8kYTip9DGTpbLZ2qa9Aq69dP")
+	FeeRecipient             = sol.MustPublicKeyFromBase58("FWsW1xNtWscwNmKv6wVsU1iTzRN6wmmk3MjxRP5tT7hz")
 	FeeRecipientTokenAccount = sol.MustPublicKeyFromBase58("BWXT6RUhit9FfJQM3pBmqeFLPYmuxgmyhMGC5sGr8RbA")
 	SystemProgramId          = sol.MustPublicKeyFromBase58("11111111111111111111111111111111")
 	TokenProgramId           = sol.MustPublicKeyFromBase58("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA")

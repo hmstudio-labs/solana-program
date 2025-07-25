@@ -43,6 +43,10 @@ type Sell struct {
 	// [15] = [] event authority
 	//
 	// [16] = [] program
+	//
+	// [17] = [] Coin Creator Vault Ata
+	//
+	// [18] = [] Coin Creator Vault Authority
 	sol.AccountMetaSlice `bin:"-"`
 }
 
@@ -53,28 +57,36 @@ func NewSellInstruction(
 	minQuoteAmountOut uint64,
 	// Accounts:
 	pool sol.PublicKey,
-	mint sol.PublicKey,
+	baseMint sol.PublicKey,
+	quoteMint sol.PublicKey,
 	useBaseTokenAccount sol.PublicKey,
 	userQuoteTokenAccount sol.PublicKey,
 	poolBaseTokenAccount sol.PublicKey,
 	poolQuoteTokenAccount sol.PublicKey,
+	feeRecipientTokenAccount sol.PublicKey,
+	coinCreatorVaultAta sol.PublicKey,
+	coinCreatorVaultAuthority sol.PublicKey,
 	user sol.PublicKey) *Sell {
 	return newSelInstructionBuilder().
 		setBaseAmountIn(baseAmountIn).
 		setMinQuoteAmountOut(minQuoteAmountOut).
 		setPoolAccount(pool).
-		setMintAccount(mint).
+		setBaseMintAccount(baseMint).
+		setQuoteMintAccount(quoteMint).
 		setUserBaseTokenAccount(useBaseTokenAccount).
 		setUserQuoteTokenAccount(userQuoteTokenAccount).
 		setPoolBaseTokenAccount(poolBaseTokenAccount).
 		setPoolQuoteTokenAccount(poolQuoteTokenAccount).
+		setProtocolFeeRecipientTokenAccount(feeRecipientTokenAccount).
+		setCoinCreatorVaultAta(coinCreatorVaultAta).
+		setCoinCreatorVaultAuthority(coinCreatorVaultAuthority).
 		setUserAccount(user)
 }
 
 // NewSellInstructionBuilder creates a new `Sell` instruction builder.
 func newSelInstructionBuilder() *Sell {
 	nd := &Sell{
-		AccountMetaSlice: make(sol.AccountMetaSlice, 17),
+		AccountMetaSlice: make(sol.AccountMetaSlice, 19),
 	}
 	return nd
 }
@@ -104,8 +116,14 @@ func (inst *Sell) setUserAccount(user sol.PublicKey) *Sell {
 }
 
 // SetMintAccount sets the "mint" account.
-func (inst *Sell) setMintAccount(mint sol.PublicKey) *Sell {
-	inst.AccountMetaSlice[3] = sol.Meta(mint)
+func (inst *Sell) setBaseMintAccount(baseMint sol.PublicKey) *Sell {
+	inst.AccountMetaSlice[3] = sol.Meta(baseMint)
+	return inst
+}
+
+// SetMintAccount sets the "mint" account.
+func (inst *Sell) setQuoteMintAccount(quoteMint sol.PublicKey) *Sell {
+	inst.AccountMetaSlice[4] = sol.Meta(quoteMint)
 	return inst
 }
 
@@ -132,13 +150,24 @@ func (inst *Sell) setPoolQuoteTokenAccount(poolQuoteTokenAccount sol.PublicKey) 
 	inst.AccountMetaSlice[8] = sol.Meta(poolQuoteTokenAccount).WRITE()
 	return inst
 }
+func (inst *Sell) setProtocolFeeRecipientTokenAccount(protocolFeeRecipientTokenAccount sol.PublicKey) *Sell {
+	inst.AccountMetaSlice[10] = sol.Meta(protocolFeeRecipientTokenAccount).WRITE()
+	return inst
+}
+func (inst *Sell) setCoinCreatorVaultAta(coinCreatorVaultAta sol.PublicKey) *Sell {
+	inst.AccountMetaSlice[17] = sol.Meta(coinCreatorVaultAta).WRITE()
+	return inst
+}
+func (inst *Sell) setCoinCreatorVaultAuthority(coinCreatorVaultAuthority sol.PublicKey) *Sell {
+	inst.AccountMetaSlice[18] = sol.Meta(coinCreatorVaultAuthority)
+	return inst
+}
 
 func (inst *Sell) Build() *Instruction {
 	// 构建accounts
 	inst.AccountMetaSlice[2] = sol.Meta(Global)
-	inst.AccountMetaSlice[4] = sol.Meta(WSOL)
 	inst.AccountMetaSlice[9] = sol.Meta(FeeRecipient)
-	inst.AccountMetaSlice[10] = sol.Meta(FeeRecipientTokenAccount).WRITE()
+	// inst.AccountMetaSlice[10] = sol.Meta(FeeRecipientTokenAccount).WRITE()
 	inst.AccountMetaSlice[11] = sol.Meta(TokenProgramId)
 	inst.AccountMetaSlice[12] = sol.Meta(TokenProgramId)
 	inst.AccountMetaSlice[13] = sol.Meta(SystemProgramId)
