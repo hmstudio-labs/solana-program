@@ -62,6 +62,7 @@ func NewBuyInstruction(
 	userQuoteTokenAccount sol.PublicKey,
 	poolBaseTokenAccount sol.PublicKey,
 	poolQuoteTokenAccount sol.PublicKey,
+	feeRecipient sol.PublicKey,
 	feeRecipientTokenAccount sol.PublicKey,
 	coinCreatorVaultAta sol.PublicKey,
 	coinCreatorVaultAuthority sol.PublicKey,
@@ -76,6 +77,7 @@ func NewBuyInstruction(
 		setUserQuoteTokenAccount(userQuoteTokenAccount).
 		setPoolBaseTokenAccount(poolBaseTokenAccount).
 		setPoolQuoteTokenAccount(poolQuoteTokenAccount).
+		setProtocolFeeRecipient(feeRecipient).
 		setProtocolFeeRecipientTokenAccount(feeRecipientTokenAccount).
 		setCoinCreatorVaultAta(coinCreatorVaultAta).
 		setCoinCreatorVaultAuthority(coinCreatorVaultAuthority).
@@ -149,7 +151,10 @@ func (inst *Buy) setPoolQuoteTokenAccount(poolQuoteTokenAccount sol.PublicKey) *
 	inst.AccountMetaSlice[8] = sol.Meta(poolQuoteTokenAccount).WRITE()
 	return inst
 }
-
+func (inst *Buy) setProtocolFeeRecipient(protocolFeeRecipient sol.PublicKey) *Buy {
+	inst.AccountMetaSlice[9] = sol.Meta(protocolFeeRecipient)
+	return inst
+}
 func (inst *Buy) setProtocolFeeRecipientTokenAccount(protocolFeeRecipientTokenAccount sol.PublicKey) *Buy {
 	inst.AccountMetaSlice[10] = sol.Meta(protocolFeeRecipientTokenAccount).WRITE()
 	return inst
@@ -165,7 +170,7 @@ func (inst *Buy) setCoinCreatorVaultAuthority(coinCreatorVaultAuthority sol.Publ
 func (inst *Buy) Build() *Instruction {
 	// 构建accounts
 	inst.AccountMetaSlice[2] = sol.Meta(Global)
-	inst.AccountMetaSlice[9] = sol.Meta(FeeRecipient)
+	// inst.AccountMetaSlice[9] = sol.Meta(FeeRecipient)
 	// inst.AccountMetaSlice[10] = sol.Meta(FeeRecipientTokenAccount).WRITE()
 	inst.AccountMetaSlice[11] = sol.Meta(TokenProgramId)
 	inst.AccountMetaSlice[12] = sol.Meta(TokenProgramId)
