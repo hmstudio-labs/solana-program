@@ -70,7 +70,7 @@ func (inst *Instruction) UnmarshalWithDecoder(decoder *bin.Decoder) error {
 }
 
 func (inst Instruction) MarshalWithEncoder(encoder *bin.Encoder) error {
-	err := encoder.WriteBytes(inst.TypeID.Bytes(), false)
+	err := encoder.WriteBytes(inst.TypeID.Bytes()[0:1], false)
 	if err != nil {
 		return fmt.Errorf("unable to write variant type: %w", err)
 	}
