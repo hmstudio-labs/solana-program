@@ -1,6 +1,7 @@
 package associatedtokenaccount
 
 import (
+	"bytes"
 	"fmt"
 
 	spew "github.com/davecgh/go-spew/spew"
@@ -53,7 +54,11 @@ func (inst *Instruction) Accounts() (out []*solana.AccountMeta) {
 }
 
 func (inst *Instruction) Data() ([]byte, error) {
-	return []byte{}, nil
+	buf := new(bytes.Buffer)
+	if err := bin.NewBorshEncoder(buf).Encode(inst); err != nil {
+		return nil, fmt.Errorf("unable to encode instruction: %w", err)
+	}
+	return buf.Bytes(), nil
 }
 
 func (inst *Instruction) TextEncode(encoder *text.Encoder, option *text.Option) error {
