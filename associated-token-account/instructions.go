@@ -65,6 +65,10 @@ func (inst *Instruction) UnmarshalWithDecoder(decoder *bin.Decoder) error {
 }
 
 func (inst Instruction) MarshalWithEncoder(encoder *bin.Encoder) error {
+	err := encoder.WriteBytes(inst.TypeID.Bytes(), false)
+	if err != nil {
+		return fmt.Errorf("unable to write variant type: %w", err)
+	}
 	return encoder.Encode(inst.Impl)
 }
 
