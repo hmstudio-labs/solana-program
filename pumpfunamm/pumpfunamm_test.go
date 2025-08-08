@@ -13,7 +13,7 @@ func TestPumpfunammBuyData(t *testing.T) {
 	var amount uint64 = 11558814
 	var maxSolCost uint64 = 1000000
 	buy := NewBuyInstruction(
-		amount, maxSolCost, unknow, unknow, unknow, unknow, unknow, unknow, unknow, unknow, unknow, unknow, unknow, unknow,
+		amount, maxSolCost, unknow, unknow, unknow, unknow, unknow, unknow, unknow, unknow, unknow, unknow, unknow, unknow, unknow,
 	)
 	i := buy.Build()
 	data, err := i.Data()

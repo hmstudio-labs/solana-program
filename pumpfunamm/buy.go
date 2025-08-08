@@ -46,6 +46,14 @@ type Buy struct {
 	// [17] = [] Coin Creator Vault Ata
 	//
 	// [18] = [] Coin Creator Vault Authority
+	//
+	// [17] = [] Coin Creator Vault Ata
+	//
+	// [18] = [] Coin Creator Vault Authority
+	//
+	// [19] = [] global volume accumulator
+	//
+	// [20] = [] user volume accumulator
 	sol.AccountMetaSlice `bin:"-"`
 }
 
@@ -66,6 +74,7 @@ func NewBuyInstruction(
 	feeRecipientTokenAccount sol.PublicKey,
 	coinCreatorVaultAta sol.PublicKey,
 	coinCreatorVaultAuthority sol.PublicKey,
+	userVolumeAccumulator sol.PublicKey,
 	user sol.PublicKey) *Buy {
 	return newBuyInstructionBuilder().
 		setBaseAmountOut(baseAmountOut).
@@ -81,13 +90,14 @@ func NewBuyInstruction(
 		setProtocolFeeRecipientTokenAccount(feeRecipientTokenAccount).
 		setCoinCreatorVaultAta(coinCreatorVaultAta).
 		setCoinCreatorVaultAuthority(coinCreatorVaultAuthority).
+		setUserVolumeAccumulator(userVolumeAccumulator).
 		setUserAccount(user)
 }
 
 // NewBuyInstructionBuilder creates a new `Buy` instruction builder.
 func newBuyInstructionBuilder() *Buy {
 	nd := &Buy{
-		AccountMetaSlice: make(sol.AccountMetaSlice, 19),
+		AccountMetaSlice: make(sol.AccountMetaSlice, 21),
 	}
 	return nd
 }
@@ -167,6 +177,10 @@ func (inst *Buy) setCoinCreatorVaultAuthority(coinCreatorVaultAuthority sol.Publ
 	inst.AccountMetaSlice[18] = sol.Meta(coinCreatorVaultAuthority)
 	return inst
 }
+func (inst *Buy) setUserVolumeAccumulator(userVolumeAccumulator sol.PublicKey) *Buy {
+	inst.AccountMetaSlice[20] = sol.Meta(userVolumeAccumulator).WRITE()
+	return inst
+}
 func (inst *Buy) Build() *Instruction {
 	// 构建accounts
 	inst.AccountMetaSlice[2] = sol.Meta(Global)
@@ -178,6 +192,7 @@ func (inst *Buy) Build() *Instruction {
 	inst.AccountMetaSlice[14] = sol.Meta(AssociatedTokenProgramId)
 	inst.AccountMetaSlice[15] = sol.Meta(EventAuthority)
 	inst.AccountMetaSlice[16] = sol.Meta(PumpAMMProgramId)
+	inst.AccountMetaSlice[19] = sol.Meta(GlobalVolumeAccumulator).WRITE()
 	return &Instruction{BaseVariant: bin.BaseVariant{
 		Impl:   inst,
 		TypeID: Instruction_Buy,

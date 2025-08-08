@@ -19,6 +19,7 @@ var (
 	EventAuthority           = sol.MustPublicKeyFromBase58("GS4CU59F31iL7aR2Q8zVS8DRrcRnXX1yjQ66TqNVQnaR")
 	PumpAMMProgramId         = sol.MustPublicKeyFromBase58("pAMMBay6oceH9fJKBRHGP5D4bD4sWpmSwMn52FMfXEA")
 	WSOL                     = sol.MustPublicKeyFromBase58("So11111111111111111111111111111111111111112")
+	GlobalVolumeAccumulator  = sol.MustPublicKeyFromBase58("C2aFPdENg4A2HQsmrd5rTw5TaYBX5Ku887cWjbFKtZpw")
 )
 
 var (
