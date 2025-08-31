@@ -21,7 +21,7 @@ func NewTokenAccount(owner sol.PublicKey, mint sol.PublicKey, lamports uint64) (
 
 func NewAccountAndInstructions(owner sol.PublicKey, mint sol.PublicKey, lamports uint64) (*sol.PublicKey, sol.Instruction, sol.Instruction, sol.Instruction, error) {
 	seed := mint.String()[0:32]
-	wrappedSolAccount, err := sol.CreateWithSeed(
+	tokenAccount, err := sol.CreateWithSeed(
 		owner,
 		seed,
 		sol.TokenProgramID,
@@ -36,7 +36,7 @@ func NewAccountAndInstructions(owner sol.PublicKey, mint sol.PublicKey, lamports
 		165,
 		sol.TokenProgramID,
 		owner,
-		wrappedSolAccount,
+		tokenAccount,
 		owner,
 	).ValidateAndBuild()
 	if err != nil {
@@ -44,8 +44,8 @@ func NewAccountAndInstructions(owner sol.PublicKey, mint sol.PublicKey, lamports
 	}
 
 	initTokenAccount, err := token.NewInitializeAccountInstruction(
-		wrappedSolAccount,
-		sol.WrappedSol,
+		tokenAccount,
+		mint,
 		owner,
 		sol.SysVarRentPubkey,
 	).ValidateAndBuild()
@@ -53,7 +53,7 @@ func NewAccountAndInstructions(owner sol.PublicKey, mint sol.PublicKey, lamports
 		return nil, nil, nil, nil, err
 	}
 	closeAccInst, err := token.NewCloseAccountInstruction(
-		wrappedSolAccount,
+		tokenAccount,
 		owner,
 		owner,
 		[]sol.PublicKey{},
@@ -62,7 +62,7 @@ func NewAccountAndInstructions(owner sol.PublicKey, mint sol.PublicKey, lamports
 	if err != nil {
 		return nil, nil, nil, nil, err
 	}
-	return &wrappedSolAccount, createAccountWithSeedIx, initTokenAccount, closeAccInst, nil
+	return &tokenAccount, createAccountWithSeedIx, initTokenAccount, closeAccInst, nil
 }
 
 func NewWSOLAccountAndInstructions(owner sol.PublicKey, lamports uint64) (*sol.PublicKey, sol.Instruction, sol.Instruction, sol.Instruction, error) {
