@@ -88,7 +88,7 @@ func NewSellInstruction(
 // NewSellInstructionBuilder creates a new `Sell` instruction builder.
 func newSelInstructionBuilder() *Sell {
 	nd := &Sell{
-		AccountMetaSlice: make(sol.AccountMetaSlice, 19),
+		AccountMetaSlice: make(sol.AccountMetaSlice, 21),
 	}
 	return nd
 }
@@ -180,6 +180,8 @@ func (inst *Sell) Build() *Instruction {
 	inst.AccountMetaSlice[14] = sol.Meta(AssociatedTokenProgramId)
 	inst.AccountMetaSlice[15] = sol.Meta(EventAuthority)
 	inst.AccountMetaSlice[16] = sol.Meta(PumpAMMProgramId)
+	inst.AccountMetaSlice[19] = sol.Meta(FeeConfig)
+	inst.AccountMetaSlice[20] = sol.Meta(FeeProgram)
 	return &Instruction{BaseVariant: bin.BaseVariant{
 		Impl:   inst,
 		TypeID: Instruction_Sell,

@@ -20,6 +20,8 @@ var (
 	PumpAMMProgramId         = sol.MustPublicKeyFromBase58("pAMMBay6oceH9fJKBRHGP5D4bD4sWpmSwMn52FMfXEA")
 	WSOL                     = sol.MustPublicKeyFromBase58("So11111111111111111111111111111111111111112")
 	GlobalVolumeAccumulator  = sol.MustPublicKeyFromBase58("C2aFPdENg4A2HQsmrd5rTw5TaYBX5Ku887cWjbFKtZpw")
+	FeeConfig                = sol.MustPublicKeyFromBase58("5PHirr8joyTMp9JMm6nW7hNDVyEYdkzDqazxPD7RaTjx")
+	FeeProgram               = sol.MustPublicKeyFromBase58("pfeeUxB6jkeY1Hxd7CsFCAjcbHA9rWtchMGdZ6VojVZ")
 )
 
 var (

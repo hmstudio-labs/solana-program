@@ -17,6 +17,8 @@ var (
 	RentProgramId            = sol.MustPublicKeyFromBase58("SysvarRent111111111111111111111111111111111")
 	EventAuthority           = sol.MustPublicKeyFromBase58("Ce6TQqeHC9p8KetsN6JsjHK7UTZk7nasjjnr7XxXp9F1")
 	PumpProgramId            = sol.MustPublicKeyFromBase58("6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P")
+	FeeConfig                = sol.MustPublicKeyFromBase58("8Wf5TiAheLUqBrKXeYg2JtAFFMWtKdG2BSFgqUcPVwTt")
+	FeeProgram               = sol.MustPublicKeyFromBase58("pfeeUxB6jkeY1Hxd7CsFCAjcbHA9rWtchMGdZ6VojVZ")
 )
 
 var (

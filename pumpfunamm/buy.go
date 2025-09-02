@@ -97,7 +97,7 @@ func NewBuyInstruction(
 // NewBuyInstructionBuilder creates a new `Buy` instruction builder.
 func newBuyInstructionBuilder() *Buy {
 	nd := &Buy{
-		AccountMetaSlice: make(sol.AccountMetaSlice, 21),
+		AccountMetaSlice: make(sol.AccountMetaSlice, 23),
 	}
 	return nd
 }
@@ -193,6 +193,8 @@ func (inst *Buy) Build() *Instruction {
 	inst.AccountMetaSlice[15] = sol.Meta(EventAuthority)
 	inst.AccountMetaSlice[16] = sol.Meta(PumpAMMProgramId)
 	inst.AccountMetaSlice[19] = sol.Meta(GlobalVolumeAccumulator).WRITE()
+	inst.AccountMetaSlice[21] = sol.Meta(FeeConfig)
+	inst.AccountMetaSlice[22] = sol.Meta(FeeProgram)
 	return &Instruction{BaseVariant: bin.BaseVariant{
 		Impl:   inst,
 		TypeID: Instruction_Buy,
