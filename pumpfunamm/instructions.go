@@ -37,6 +37,8 @@ var (
 	// Buys tokens from a bonding curve.
 	Instruction_Buy = bin.TypeID([8]byte{102, 6, 61, 18, 1, 218, 235, 234})
 
+	Instruction_BuyExactQuoteIn = bin.TypeID([8]byte{198, 46, 21, 82, 180, 217, 232, 112})
+
 	// Sells tokens into a bonding curve.
 	Instruction_Sell = bin.TypeID([8]byte{51, 230, 133, 164, 1, 127, 131, 173})
 
