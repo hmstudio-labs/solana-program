@@ -116,7 +116,7 @@ func (inst *BuyExactQuoteIn) setMinBaseAmountOut(minBaseAmountOut uint64) *BuyEx
 
 // setPoolAccount sets the "pool" account.
 func (inst *BuyExactQuoteIn) setPoolAccount(pool sol.PublicKey) *BuyExactQuoteIn {
-	inst.AccountMetaSlice[0] = sol.Meta(pool)
+	inst.AccountMetaSlice[0] = sol.Meta(pool).WRITE()
 	return inst
 }
 

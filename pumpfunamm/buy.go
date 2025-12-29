@@ -116,7 +116,7 @@ func (inst *Buy) setMaxQuoteAmountIn(maxQuoteAmountIn uint64) *Buy {
 
 // setPoolAccount sets the "pool" account.
 func (inst *Buy) setPoolAccount(pool sol.PublicKey) *Buy {
-	inst.AccountMetaSlice[0] = sol.Meta(pool)
+	inst.AccountMetaSlice[0] = sol.Meta(pool).WRITE()
 	return inst
 }
 

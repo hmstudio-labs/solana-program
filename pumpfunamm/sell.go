@@ -107,7 +107,7 @@ func (inst *Sell) setMinQuoteAmountOut(minQuoteAmountOut uint64) *Sell {
 
 // setPoolAccount sets the "pool" account.
 func (inst *Sell) setPoolAccount(pool sol.PublicKey) *Sell {
-	inst.AccountMetaSlice[0] = sol.Meta(pool)
+	inst.AccountMetaSlice[0] = sol.Meta(pool).WRITE()
 	return inst
 }
 
