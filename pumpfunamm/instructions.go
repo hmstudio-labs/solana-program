@@ -42,7 +42,8 @@ var (
 	// Sells tokens into a bonding curve.
 	Instruction_Sell = bin.TypeID([8]byte{51, 230, 133, 164, 1, 127, 131, 173})
 
-	Instruction_CloseUserVolumeAccumulator = bin.TypeID([8]byte{51, 230, 133, 164, 1, 127, 131, 173})
+	// f945a4da9667548a
+	Instruction_CloseUserVolumeAccumulator = bin.TypeID([8]byte{249, 69, 164, 218, 150, 103, 84, 138})
 	// Allows the admin to withdraw liquidity for a migration once the bonding curve completes
 	// Instruction_Withdraw = bin.TypeID([8]byte{183, 18, 70, 156, 148, 109, 161, 34})
 )
