@@ -88,6 +88,7 @@ func NewSellInstruction(
 		setProtocolFeeRecipientTokenAccount(feeRecipientTokenAccount).
 		setCoinCreatorVaultAta(coinCreatorVaultAta).
 		setCoinCreatorVaultAuthority(coinCreatorVaultAuthority).
+		setUserVolumeAccumulator(userVolumeAccumulator).
 		setUserAccount(user)
 }
 
