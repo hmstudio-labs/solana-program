@@ -4,7 +4,7 @@ import (
 	sol "github.com/gagliardetto/solana-go"
 	"github.com/gagliardetto/solana-go/programs/system"
 	"github.com/gagliardetto/solana-go/programs/token"
-	"github.com/gagliardetto/solana-go/programs/token-2022"
+	token2022 "github.com/gagliardetto/solana-go/programs/token-2022"
 )
 
 func NewTokenAccount(owner sol.PublicKey, mint sol.PublicKey, lamports uint64) (*sol.PublicKey, error) {
@@ -136,7 +136,7 @@ func NewAccountAndInstructionsV2(owner sol.PublicKey, mint sol.PublicKey, lampor
 		return nil, nil, nil, nil, err
 	}
 
-	initTokenAccount, err := token.NewInitializeAccount3Instruction(
+	initTokenAccount, err := token2022.NewInitializeAccount3Instruction(
 		tokenAccount,
 		mint,
 		owner,
