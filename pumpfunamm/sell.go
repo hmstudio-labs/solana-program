@@ -163,7 +163,7 @@ func (inst *Sell) setProtocolFeeRecipientTokenAccount(protocolFeeRecipientTokenA
 	return inst
 }
 func (inst *Sell) setBaseTokenProgram(tokenProgram sol.PublicKey) *Sell {
-	inst.AccountMetaSlice[11] = sol.Meta(TokenProgramId)
+	inst.AccountMetaSlice[11] = sol.Meta(tokenProgram)
 	return inst
 }
 func (inst *Sell) setCoinCreatorVaultAta(coinCreatorVaultAta sol.PublicKey) *Sell {

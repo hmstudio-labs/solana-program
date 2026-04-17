@@ -172,7 +172,7 @@ func (inst *BuyExactQuoteIn) setProtocolFeeRecipientTokenAccount(protocolFeeReci
 	return inst
 }
 func (inst *BuyExactQuoteIn) setBaseTokenProgram(tokenProgram sol.PublicKey) *BuyExactQuoteIn {
-	inst.AccountMetaSlice[11] = sol.Meta(TokenProgramId)
+	inst.AccountMetaSlice[11] = sol.Meta(tokenProgram)
 	return inst
 }
 func (inst *BuyExactQuoteIn) setCoinCreatorVaultAta(coinCreatorVaultAta sol.PublicKey) *BuyExactQuoteIn {
