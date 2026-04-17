@@ -137,9 +137,9 @@ func NewAccountAndInstructionsV2(owner sol.PublicKey, mint sol.PublicKey, lampor
 	}
 
 	initTokenAccount, err := token2022.NewInitializeAccount3Instruction(
+		owner,
 		tokenAccount,
 		mint,
-		owner,
 	).ValidateAndBuild()
 	if err != nil {
 		return nil, nil, nil, nil, err
