@@ -59,6 +59,7 @@ func NewSellInstruction(
 	pool sol.PublicKey,
 	baseMint sol.PublicKey,
 	quoteMint sol.PublicKey,
+	baseTokenProgram sol.PublicKey,
 	useBaseTokenAccount sol.PublicKey,
 	userQuoteTokenAccount sol.PublicKey,
 	poolBaseTokenAccount sol.PublicKey,
@@ -74,6 +75,7 @@ func NewSellInstruction(
 		setPoolAccount(pool).
 		setBaseMintAccount(baseMint).
 		setQuoteMintAccount(quoteMint).
+		setBaseTokenProgram(baseTokenProgram).
 		setUserBaseTokenAccount(useBaseTokenAccount).
 		setUserQuoteTokenAccount(userQuoteTokenAccount).
 		setPoolBaseTokenAccount(poolBaseTokenAccount).
@@ -160,6 +162,10 @@ func (inst *Sell) setProtocolFeeRecipientTokenAccount(protocolFeeRecipientTokenA
 	inst.AccountMetaSlice[10] = sol.Meta(protocolFeeRecipientTokenAccount).WRITE()
 	return inst
 }
+func (inst *Sell) setBaseTokenProgram(tokenProgram sol.PublicKey) *Sell {
+	inst.AccountMetaSlice[11] = sol.Meta(TokenProgramId)
+	return inst
+}
 func (inst *Sell) setCoinCreatorVaultAta(coinCreatorVaultAta sol.PublicKey) *Sell {
 	inst.AccountMetaSlice[17] = sol.Meta(coinCreatorVaultAta).WRITE()
 	return inst
@@ -174,7 +180,7 @@ func (inst *Sell) Build() *Instruction {
 	inst.AccountMetaSlice[2] = sol.Meta(Global)
 	// inst.AccountMetaSlice[9] = sol.Meta(FeeRecipient)
 	// inst.AccountMetaSlice[10] = sol.Meta(FeeRecipientTokenAccount).WRITE()
-	inst.AccountMetaSlice[11] = sol.Meta(TokenProgramId)
+	// inst.AccountMetaSlice[11] = sol.Meta(TokenProgramId)
 	inst.AccountMetaSlice[12] = sol.Meta(TokenProgramId)
 	inst.AccountMetaSlice[13] = sol.Meta(SystemProgramId)
 	inst.AccountMetaSlice[14] = sol.Meta(AssociatedTokenProgramId)
