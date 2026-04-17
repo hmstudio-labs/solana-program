@@ -75,3 +75,16 @@ func (inst Instruction) MarshalWithEncoder(encoder *bin.Encoder) error {
 	}
 	return encoder.Encode(inst.Impl)
 }
+
+func GetUserVolumeAccumulatorWsolATA(owner sol.PublicKey) sol.PublicKey {
+	ata, _, _ := sol.FindAssociatedTokenAddress(owner, sol.WrappedSol)
+	return ata
+}
+
+func GetPoolV2Pda(mint sol.PublicKey) sol.PublicKey {
+	poolV2Pda, _, _ := sol.FindProgramAddress(
+		[][]byte{[]byte("pool-v2"), mint[:]},
+		PumpAMMProgramId,
+	)
+	return poolV2Pda
+}

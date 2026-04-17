@@ -29,7 +29,7 @@ func TestPumpfunSellData(t *testing.T) {
 	var amount uint64 = 5669891040
 	var minSolOutput uint64 = 0
 	buy := NewSellInstruction(
-		amount, minSolOutput, unknow, unknow, unknow, unknow, unknow, unknow, unknow, unknow, unknow, unknow, unknow, unknow, unknow,
+		amount, minSolOutput, false, unknow, unknow, unknow, unknow, unknow, unknow, unknow, unknow, unknow, unknow, unknow, unknow, unknow, unknow,
 	)
 	i := buy.Build()
 	data, err := i.Data()

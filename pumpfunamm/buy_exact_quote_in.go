@@ -8,6 +8,7 @@ import (
 type BuyExactQuoteIn struct {
 	BaseAmountIn     *uint64
 	MinBaseAmountOut *uint64
+	IsCashbackCoin   bool
 
 	// [0] = [] pool
 	//
@@ -62,6 +63,7 @@ func NewBuyExactQuoteInInstruction(
 	// Parameters:
 	baseAmountIn uint64,
 	minBaseAmountOut uint64,
+	isCashbackCoin bool,
 	// Accounts:
 	pool sol.PublicKey,
 	baseMint sol.PublicKey,
@@ -77,9 +79,10 @@ func NewBuyExactQuoteInInstruction(
 	coinCreatorVaultAuthority sol.PublicKey,
 	userVolumeAccumulator sol.PublicKey,
 	user sol.PublicKey) *BuyExactQuoteIn {
-	return newBuyExactQuoteInInstructionBuilder().
+	return newBuyExactQuoteInInstructionBuilder(isCashbackCoin).
 		setBaseAmountIn(baseAmountIn).
 		setMinBaseAmountOut(minBaseAmountOut).
+		setIsCashbackCoin(isCashbackCoin).
 		setPoolAccount(pool).
 		setBaseMintAccount(baseMint).
 		setQuoteMintAccount(quoteMint).
@@ -97,11 +100,21 @@ func NewBuyExactQuoteInInstruction(
 }
 
 // NewBuyExactQuoteInInstructionBuilder creates a new `BuyExactQuoteIn` instruction builder.
-func newBuyExactQuoteInInstructionBuilder() *BuyExactQuoteIn {
+func newBuyExactQuoteInInstructionBuilder(isCashbackCoin bool) *BuyExactQuoteIn {
+	size := 24
+	if isCashbackCoin {
+		size = 25
+	}
 	nd := &BuyExactQuoteIn{
-		AccountMetaSlice: make(sol.AccountMetaSlice, 23),
+		AccountMetaSlice: make(sol.AccountMetaSlice, size),
 	}
 	return nd
+}
+
+// setIsCashbackCoin sets the "isCashbackCoin" parameter.
+func (inst *BuyExactQuoteIn) setIsCashbackCoin(isCashbackCoin bool) *BuyExactQuoteIn {
+	inst.IsCashbackCoin = isCashbackCoin
+	return inst
 }
 
 // setBaseAmountIn sets the "baseAmountIn" parameter.
@@ -201,6 +214,13 @@ func (inst *BuyExactQuoteIn) Build() *Instruction {
 	inst.AccountMetaSlice[19] = sol.Meta(GlobalVolumeAccumulator).WRITE()
 	inst.AccountMetaSlice[21] = sol.Meta(FeeConfig)
 	inst.AccountMetaSlice[22] = sol.Meta(FeeProgram)
+	if inst.IsCashbackCoin {
+		inst.AccountMetaSlice[23] = sol.Meta(GetUserVolumeAccumulatorWsolATA(inst.AccountMetaSlice[20].PublicKey)).WRITE()
+		inst.AccountMetaSlice[24] = sol.Meta(GetPoolV2Pda(inst.AccountMetaSlice[3].PublicKey))
+	} else {
+		inst.AccountMetaSlice[23] = sol.Meta(GetPoolV2Pda(inst.AccountMetaSlice[3].PublicKey))
+	}
+
 	return &Instruction{BaseVariant: bin.BaseVariant{
 		Impl:   inst,
 		TypeID: Instruction_BuyExactQuoteIn,

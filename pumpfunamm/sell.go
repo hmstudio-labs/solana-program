@@ -7,9 +7,10 @@ import (
 
 // Sells tokens into a bonding curve.
 type Sell struct {
-	BaseAmountIn      *uint64
-	MinQuoteAmountOut *uint64
-
+	BaseAmountIn          *uint64
+	MinQuoteAmountOut     *uint64
+	IsCashbackCoin        bool
+	userVolumeAccumulator sol.PublicKey
 	// [0] = [] pool
 	//
 	// [1] = [WRITE, SIGNER] user
@@ -55,6 +56,7 @@ func NewSellInstruction(
 	// Parameters:
 	baseAmountIn uint64,
 	minQuoteAmountOut uint64,
+	isCashbackCoin bool,
 	// Accounts:
 	pool sol.PublicKey,
 	baseMint sol.PublicKey,
@@ -68,10 +70,12 @@ func NewSellInstruction(
 	feeRecipientTokenAccount sol.PublicKey,
 	coinCreatorVaultAta sol.PublicKey,
 	coinCreatorVaultAuthority sol.PublicKey,
+	userVolumeAccumulator sol.PublicKey,
 	user sol.PublicKey) *Sell {
-	return newSelInstructionBuilder().
+	return newSelInstructionBuilder(isCashbackCoin).
 		setBaseAmountIn(baseAmountIn).
 		setMinQuoteAmountOut(minQuoteAmountOut).
+		setIsCashbackCoin(isCashbackCoin).
 		setPoolAccount(pool).
 		setBaseMintAccount(baseMint).
 		setQuoteMintAccount(quoteMint).
@@ -88,11 +92,21 @@ func NewSellInstruction(
 }
 
 // NewSellInstructionBuilder creates a new `Sell` instruction builder.
-func newSelInstructionBuilder() *Sell {
+func newSelInstructionBuilder(isCashbackCoin bool) *Sell {
+	size := 22
+	if isCashbackCoin {
+		size = 24
+	}
 	nd := &Sell{
-		AccountMetaSlice: make(sol.AccountMetaSlice, 21),
+		AccountMetaSlice: make(sol.AccountMetaSlice, size),
 	}
 	return nd
+}
+
+// setIsCashbackCoin sets the "isCashbackCoin" parameter.
+func (inst *Sell) setIsCashbackCoin(isCashbackCoin bool) *Sell {
+	inst.IsCashbackCoin = isCashbackCoin
+	return inst
 }
 
 // setBaseAmountIn sets the "baseAmountIn" parameter.
@@ -174,6 +188,10 @@ func (inst *Sell) setCoinCreatorVaultAuthority(coinCreatorVaultAuthority sol.Pub
 	inst.AccountMetaSlice[18] = sol.Meta(coinCreatorVaultAuthority)
 	return inst
 }
+func (inst *Sell) setUserVolumeAccumulator(userVolumeAccumulator sol.PublicKey) *Sell {
+	inst.userVolumeAccumulator = userVolumeAccumulator
+	return inst
+}
 
 func (inst *Sell) Build() *Instruction {
 	// 构建accounts
@@ -188,6 +206,14 @@ func (inst *Sell) Build() *Instruction {
 	inst.AccountMetaSlice[16] = sol.Meta(PumpAMMProgramId)
 	inst.AccountMetaSlice[19] = sol.Meta(FeeConfig)
 	inst.AccountMetaSlice[20] = sol.Meta(FeeProgram)
+	if inst.IsCashbackCoin {
+		inst.AccountMetaSlice[21] = sol.Meta(GetUserVolumeAccumulatorWsolATA(inst.userVolumeAccumulator)).WRITE()
+		inst.AccountMetaSlice[22] = sol.Meta(inst.userVolumeAccumulator).WRITE()
+		inst.AccountMetaSlice[23] = sol.Meta(GetPoolV2Pda(inst.AccountMetaSlice[3].PublicKey))
+	} else {
+		inst.AccountMetaSlice[21] = sol.Meta(GetPoolV2Pda(inst.AccountMetaSlice[3].PublicKey))
+	}
+
 	return &Instruction{BaseVariant: bin.BaseVariant{
 		Impl:   inst,
 		TypeID: Instruction_Sell,
