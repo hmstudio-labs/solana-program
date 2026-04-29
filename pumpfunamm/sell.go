@@ -94,9 +94,9 @@ func NewSellInstruction(
 
 // NewSellInstructionBuilder creates a new `Sell` instruction builder.
 func newSelInstructionBuilder(isCashbackCoin bool) *Sell {
-	size := 22
+	size := 24
 	if isCashbackCoin {
-		size = 24
+		size = 26
 	}
 	nd := &Sell{
 		AccountMetaSlice: make(sol.AccountMetaSlice, size),
@@ -211,8 +211,12 @@ func (inst *Sell) Build() *Instruction {
 		inst.AccountMetaSlice[21] = sol.Meta(GetUserVolumeAccumulatorWsolATA(inst.userVolumeAccumulator)).WRITE()
 		inst.AccountMetaSlice[22] = sol.Meta(inst.userVolumeAccumulator).WRITE()
 		inst.AccountMetaSlice[23] = sol.Meta(GetPoolV2Pda(inst.AccountMetaSlice[3].PublicKey))
+		inst.AccountMetaSlice[24] = sol.Meta(NewFeeRecipient)
+		inst.AccountMetaSlice[25] = sol.Meta(NewFeeRecipientTokenAccount)
 	} else {
 		inst.AccountMetaSlice[21] = sol.Meta(GetPoolV2Pda(inst.AccountMetaSlice[3].PublicKey))
+		inst.AccountMetaSlice[22] = sol.Meta(NewFeeRecipient)
+		inst.AccountMetaSlice[23] = sol.Meta(NewFeeRecipientTokenAccount)
 	}
 
 	return &Instruction{BaseVariant: bin.BaseVariant{

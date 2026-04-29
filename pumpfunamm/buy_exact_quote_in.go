@@ -101,9 +101,9 @@ func NewBuyExactQuoteInInstruction(
 
 // NewBuyExactQuoteInInstructionBuilder creates a new `BuyExactQuoteIn` instruction builder.
 func newBuyExactQuoteInInstructionBuilder(isCashbackCoin bool) *BuyExactQuoteIn {
-	size := 24
+	size := 26
 	if isCashbackCoin {
-		size = 25
+		size = 27
 	}
 	nd := &BuyExactQuoteIn{
 		AccountMetaSlice: make(sol.AccountMetaSlice, size),
@@ -217,8 +217,12 @@ func (inst *BuyExactQuoteIn) Build() *Instruction {
 	if inst.IsCashbackCoin {
 		inst.AccountMetaSlice[23] = sol.Meta(GetUserVolumeAccumulatorWsolATA(inst.AccountMetaSlice[20].PublicKey)).WRITE()
 		inst.AccountMetaSlice[24] = sol.Meta(GetPoolV2Pda(inst.AccountMetaSlice[3].PublicKey))
+		inst.AccountMetaSlice[25] = sol.Meta(NewFeeRecipient)
+		inst.AccountMetaSlice[26] = sol.Meta(NewFeeRecipientTokenAccount)
 	} else {
 		inst.AccountMetaSlice[23] = sol.Meta(GetPoolV2Pda(inst.AccountMetaSlice[3].PublicKey))
+		inst.AccountMetaSlice[24] = sol.Meta(NewFeeRecipient)
+		inst.AccountMetaSlice[25] = sol.Meta(NewFeeRecipientTokenAccount)
 	}
 
 	return &Instruction{BaseVariant: bin.BaseVariant{
