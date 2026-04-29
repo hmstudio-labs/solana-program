@@ -212,11 +212,11 @@ func (inst *Sell) Build() *Instruction {
 		inst.AccountMetaSlice[22] = sol.Meta(inst.userVolumeAccumulator).WRITE()
 		inst.AccountMetaSlice[23] = sol.Meta(GetPoolV2Pda(inst.AccountMetaSlice[3].PublicKey))
 		inst.AccountMetaSlice[24] = sol.Meta(NewFeeRecipient)
-		inst.AccountMetaSlice[25] = sol.Meta(NewFeeRecipientTokenAccount)
+		inst.AccountMetaSlice[25] = sol.Meta(NewFeeRecipientTokenAccount).WRITE()
 	} else {
 		inst.AccountMetaSlice[21] = sol.Meta(GetPoolV2Pda(inst.AccountMetaSlice[3].PublicKey))
 		inst.AccountMetaSlice[22] = sol.Meta(NewFeeRecipient)
-		inst.AccountMetaSlice[23] = sol.Meta(NewFeeRecipientTokenAccount)
+		inst.AccountMetaSlice[23] = sol.Meta(NewFeeRecipientTokenAccount).WRITE()
 	}
 
 	return &Instruction{BaseVariant: bin.BaseVariant{
